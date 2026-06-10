@@ -194,6 +194,7 @@ function renderCartSidebar() {
           <label for="shippingNote">Not</label>
           <textarea id="shippingNote" placeholder="Kapı girişine bilgi verin...">${(getAddressData().note || '').replace(/"/g, '&quot;')}</textarea>
         </div>
+        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="completeOrder()">Siparişi Tamamla</button>
       </div>`);
 
     const paymentInputs = ['cardHolder', 'cardNumber', 'cardExpiry', 'cardCvv'];

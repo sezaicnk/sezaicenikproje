@@ -478,6 +478,7 @@ section {
   width: 420px;
   max-width: 100%;
   height: 100vh;
+  overflow: hidden;
   background: var(--white);
   z-index: 2001;
   transition: var(--transition);
@@ -513,7 +514,8 @@ section {
 }
 
 .cart-items {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   padding: 20px;
 }
@@ -590,6 +592,9 @@ section {
 }
 
 .cart-footer {
+  flex-shrink: 0;
+  max-height: 60vh;
+  overflow-y: auto;
   padding: 20px 24px;
   border-top: 1px solid #eee;
   background: var(--bg);

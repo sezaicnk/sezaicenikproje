@@ -39,6 +39,8 @@
         <li><button class="active" data-tab="products">📦 Ürün Yönetimi</button></li>
         <li><button data-tab="add">➕ Ürün Ekle</button></li>
         <li><button data-tab="stock">📊 Stok Kontrolü</button></li>
+        <li><button data-tab="orders">🧾 Siparişler</button></li>
+        <li><button data-tab="new-order">🆕 Yeni Sipariş</button></li>
         <li><button id="logoutBtn">🚪 Çıkış Yap</button></li>
       </ul>
     </aside>
@@ -109,6 +111,91 @@
               <input type="url" id="productImage" placeholder="https://...">
             </div>
             <button type="submit" class="btn btn-primary">Ürün Ekle</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div id="tab-orders" class="admin-tab hidden">
+        <div class="admin-header">
+          <h1>Siparişler ve Detay</h1>
+        </div>
+        <div class="admin-card">
+          <div id="ordersSummary" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;"></div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Sipariş No</th>
+                <th>Toplam</th>
+                <th>Ürün Sayısı</th>
+                <th>Kart Bilgisi</th>
+                <th>Tarih</th>
+                <th>Detay</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+        <div class="admin-card" id="orderDetailCard" style="display:none;">
+          <h3>Sipariş Detayı</h3>
+          <div id="orderDetailContent"></div>
+        </div>
+      </div>
+
+      <!-- New Order Tab -->
+      <div id="tab-new-order" class="admin-tab hidden">
+        <div class="admin-header">
+          <h1>Yeni Sipariş Oluştur</h1>
+        </div>
+        <div class="admin-card">
+          <form id="createOrderForm">
+            <div class="form-group">
+              <label for="orderProduct">Ürün</label>
+              <select id="orderProduct" required></select>
+            </div>
+            <div class="form-group">
+              <label for="orderQty">Adet</label>
+              <input type="number" id="orderQty" required min="1" value="1">
+            </div>
+            <div class="form-group">
+              <label for="orderCardHolder">Kart Sahibi</label>
+              <input type="text" id="orderCardHolder" required placeholder="Ali Yılmaz">
+            </div>
+            <div class="form-group">
+              <label for="orderCardNumber">Kart Numarası</label>
+              <input type="text" id="orderCardNumber" required maxlength="19" placeholder="1111 2222 3333 4444">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div class="form-group">
+                <label for="orderExpiry">Son Kullanma</label>
+                <input type="text" id="orderExpiry" required maxlength="5" placeholder="12/30">
+              </div>
+              <div class="form-group">
+                <label for="orderCvv">CVV</label>
+                <input type="password" id="orderCvv" required maxlength="4" placeholder="123">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="orderFullName">Teslimat Adı</label>
+              <input type="text" id="orderFullName" required placeholder="Ad Soyad">
+            </div>
+            <div class="form-group">
+              <label for="orderPhone">Telefon</label>
+              <input type="tel" id="orderPhone" required placeholder="0555 123 45 67">
+            </div>
+            <div class="form-group">
+              <label for="orderAddress">Adres</label>
+              <textarea id="orderAddress" required placeholder="Mahalle/Sokak, Apt No"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="orderCity">Şehir</label>
+              <input type="text" id="orderCity" required placeholder="İstanbul">
+            </div>
+            <div class="form-group">
+              <label for="orderNote">Not</label>
+              <textarea id="orderNote" placeholder="Kapı girişine bilgi verin..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Sipariş Kaydı Oluştur</button>
           </form>
         </div>
       </div>

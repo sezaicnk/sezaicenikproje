@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kayıt Ol - Altuğ Yapı</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="login-container">
+    <section class="login-box">
+      <h2>📝 Kayıt Ol</h2>
+      <p class="login-subtitle">Sipariş vermek için ücretsiz hesap oluşturun.</p>
+      <div id="registerAlert" class="alert alert-error hidden"></div>
+      <form id="registerForm" class="login-form">
+        <div class="form-group">
+          <label for="fullName">Ad Soyad</label>
+          <input type="text" id="fullName" name="fullName" required placeholder="Ali Yılmaz">
+        </div>
+        <div class="form-group">
+          <label for="email">E-posta</label>
+          <input type="email" id="email" name="email" required placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="tel" id="phone" name="phone" placeholder="0555 123 45 67">
+        </div>
+        <div class="form-group">
+          <label for="password">Şifre</label>
+          <input type="password" id="password" name="password" required placeholder="••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Kayıt Ol</button>
+      </form>
+      <p style="text-align:center; margin-top:16px; color:#7f8c8d; font-size:0.85rem;">Zaten hesabınız var mı? <a href="login.html" style="color:var(--primary);">Giriş yapın</a></p>
+      <a href="index.html" style="display:block; text-align:center; margin-top:12px; color:var(--text-light);">Ana sayfaya dön</a>
+    </section>
+  </main>
+
+  <script src="js/register.js"></script>
+</body>
+</html>

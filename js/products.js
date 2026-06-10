@@ -119,9 +119,9 @@ async function submitContact(formData) {
   });
 }
 
-async function submitOrder(items) {
+async function submitOrder(items, payment = {}, shippingAddress = {}) {
   return apiRequest('/api/orders', {
     method: 'POST',
-    body: JSON.stringify({ items })
+    body: JSON.stringify({ items, payment, shippingAddress })
   });
 }

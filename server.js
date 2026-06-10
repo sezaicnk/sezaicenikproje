@@ -38,10 +38,32 @@ app.post('/api/auth/login', (req, res) => {
   if (username === ADMIN_USER && password === ADMIN_PASS) {
     const token = crypto.randomBytes(32).toString('hex');
     activeTokens.add(token);
-    return res.json({ token, message: 'Giriş başarılı' });
+    return res.json({ token, message: 'Giriş başarılı', role: 'admin' });
+  }
+
+  const user = db.getUserByEmail(username);
+  if (user && user.password === password) {
+    const token = crypto.randomBytes(32).toString('hex');
+    activeTokens.add(token);
+    return res.json({ token, message: 'Giriş başarılı', role: 'user', user });
   }
 
   res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı' });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { fullName, email, password, phone } = req.body;
+
+  if (!fullName || !email || !password) {
+    return res.status(400).json({ error: 'Ad soyad, e-posta ve şifre zorunludur' });
+  }
+
+  try {
+    const user = db.createUser({ fullName, email, password, phone });
+    res.status(201).json({ message: 'Kayıt başarıyla oluşturuldu', user });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 app.get('/api/products', (_req, res) => {
@@ -124,20 +146,41 @@ app.post('/api/contact', (req, res) => {
   res.status(201).json({ message: 'Mesajınız kaydedildi' });
 });
 
+app.get('/api/orders', requireAdmin, (_req, res) => {
+  res.json(db.getOrders());
+});
+
 app.post('/api/orders', (req, res) => {
-  const { items } = req.body;
+  const { items, payment, shippingAddress } = req.body;
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Sepet boş' });
   }
 
   try {
-    const order = db.createOrder(items);
+    const order = db.createOrder(items, payment || {}, shippingAddress || {});
     res.status(201).json({
       orderId: order.id,
       total: order.total,
-      items: order.items
+      items: order.items,
+      payment: order.payment,
+      shippingAddress: order.shippingAddress
     });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post('/api/orders/admin', requireAdmin, (req, res) => {
+  const { items, payment, shippingAddress } = req.body;
+
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Sipariş için en az bir ürün seçiniz' });
+  }
+
+  try {
+    const order = db.createOrder(items, payment || {}, shippingAddress || {});
+    res.status(201).json(order);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

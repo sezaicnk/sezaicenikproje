@@ -30,6 +30,80 @@ function renderProductsTable() {
   }).join('');
 }
 
+async function loadOrders() {
+  try {
+    const orders = await apiRequest('/api/orders');
+    renderOrdersTable(orders);
+    return orders;
+  } catch (error) {
+    showAdminAlert(error.message, 'error');
+    return [];
+  }
+}
+
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('ordersTable');
+  const summaryEl = document.getElementById('ordersSummary');
+  if (!tbody) return;
+
+  const totalOrders = orders.length;
+  const totalValue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+  const itemCount = orders.reduce((sum, order) => sum + (order.items?.length || 0), 0);
+
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+      <div class="stat-card"><div class="stat-number">${totalOrders}</div><div class="stat-label">Toplam Sipariş</div></div>
+      <div class="stat-card"><div class="stat-number">${itemCount}</div><div class="stat-label">Ürün Adedi</div></div>
+      <div class="stat-card"><div class="stat-number">${formatPrice(totalValue)}</div><div class="stat-label">Toplam Tutar</div></div>`;
+  }
+
+  tbody.innerHTML = orders.map(order => `
+    <tr>
+      <td><strong>#${order.id}</strong></td>
+      <td>${formatPrice(order.total || 0)}</td>
+      <td>${(order.items || []).length} ürün</td>
+      <td>${order.payment?.cardHolder || '—'}<br><small>${order.payment?.cardNumberLast4 ? '**** ' + order.payment.cardNumberLast4 : 'Kart bilgisi yok'}</small></td>
+      <td>${new Date(order.created_at).toLocaleString('tr-TR')}</td>
+      <td><button class="btn btn-primary btn-sm" onclick="showOrderDetail(${order.id})">Detay</button></td>
+    </tr>`).join('');
+}
+
+function showOrderDetail(orderId) {
+  const detailCard = document.getElementById('orderDetailCard');
+  const detailContent = document.getElementById('orderDetailContent');
+  const orders = getOrdersCache || [];
+  const order = orders.find(item => item.id === Number(orderId));
+
+  if (!order || !detailCard || !detailContent) return;
+
+  const itemsHtml = (order.items || []).map(item => `
+    <li style="margin-bottom:8px;">${item.name} × ${item.quantity} — ${formatPrice(item.price * item.quantity)}</li>`).join('');
+
+  detailContent.innerHTML = `
+    <p><strong>Sipariş No:</strong> #${order.id}</p>
+    <p><strong>Tarih:</strong> ${new Date(order.created_at).toLocaleString('tr-TR')}</p>
+    <p><strong>Toplam Tutar:</strong> ${formatPrice(order.total || 0)}</p>
+    <p><strong>Kart Sahibi:</strong> ${order.payment?.cardHolder || 'Belirtilmedi'}</p>
+    <p><strong>Kart Son 4 Hane:</strong> ${order.payment?.cardNumberLast4 || 'Belirtilmedi'}</p>
+    <p><strong>Son Kullanma:</strong> ${order.payment?.expiry || 'Belirtilmedi'}</p>
+    <p><strong>Adres:</strong> ${order.shippingAddress?.address || 'Belirtilmedi'}</p>
+    <p><strong>Şehir:</strong> ${order.shippingAddress?.city || 'Belirtilmedi'}</p>
+    <p><strong>Telefon:</strong> ${order.shippingAddress?.phone || 'Belirtilmedi'}</p>
+    <p><strong>Alıcı:</strong> ${order.shippingAddress?.fullName || 'Belirtilmedi'}</p>
+    <ul style="padding-left:18px; margin-top:12px;">${itemsHtml}</ul>`;
+  detailCard.style.display = 'block';
+}
+
+let getOrdersCache = [];
+
+function populateOrderProductOptions() {
+  const select = document.getElementById('orderProduct');
+  if (!select) return;
+
+  const products = getProducts();
+  select.innerHTML = products.map(product => `<option value="${product.id}" ${product.stock <= 0 ? 'disabled' : ''}>${product.name} — ${formatPrice(product.price)} (${product.stock} adet)</option>`).join('');
+}
+
 function renderStockTable() {
   const tbody = document.getElementById('stockTable');
   const summaryEl = document.getElementById('stockSummary');
@@ -103,6 +177,13 @@ function switchTab(tabName) {
 
   if (tabName === 'products') renderProductsTable();
   if (tabName === 'stock') renderStockTable();
+  if (tabName === 'new-order') populateOrderProductOptions();
+  if (tabName === 'orders') {
+    loadOrders().then(orders => {
+      getOrdersCache = orders;
+      renderOrdersTable(orders);
+    });
+  }
 }
 
 async function initAdmin() {
@@ -113,6 +194,7 @@ async function initAdmin() {
     await initProducts();
     loginScreen.classList.add('hidden');
     adminPanel.classList.remove('hidden');
+    populateOrderProductOptions();
     renderProductsTable();
   }
 
@@ -128,6 +210,7 @@ async function initAdmin() {
       loginScreen.classList.add('hidden');
       adminPanel.classList.remove('hidden');
       alertEl.classList.add('hidden');
+      populateOrderProductOptions();
       renderProductsTable();
     } catch (error) {
       alertEl.textContent = error.message;
@@ -142,6 +225,49 @@ async function initAdmin() {
 
   document.querySelectorAll('.admin-nav button[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  document.getElementById('createOrderForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const productId = Number(document.getElementById('orderProduct').value);
+    const quantity = Math.max(1, parseInt(document.getElementById('orderQty').value, 10) || 1);
+    const product = getProductById(productId);
+
+    if (!product) {
+      showAdminAlert('Lütfen geçerli bir ürün seçin.', 'error');
+      return;
+    }
+
+    try {
+      const order = await apiRequest('/api/orders/admin', {
+        method: 'POST',
+        body: JSON.stringify({
+          items: [{ id: product.id, quantity }],
+          payment: {
+            cardHolder: document.getElementById('orderCardHolder').value,
+            cardNumber: document.getElementById('orderCardNumber').value,
+            expiry: document.getElementById('orderExpiry').value,
+            cvv: document.getElementById('orderCvv').value
+          },
+          shippingAddress: {
+            fullName: document.getElementById('orderFullName').value,
+            phone: document.getElementById('orderPhone').value,
+            address: document.getElementById('orderAddress').value,
+            city: document.getElementById('orderCity').value,
+            note: document.getElementById('orderNote').value
+          }
+        })
+      });
+
+      e.target.reset();
+      populateOrderProductOptions();
+      showAdminAlert(`Sipariş kaydı oluşturuldu: #${order.id}`, 'success');
+      switchTab('orders');
+      await loadOrders();
+    } catch (error) {
+      showAdminAlert(error.message, 'error');
+    }
   });
 
   document.getElementById('addProductForm')?.addEventListener('submit', async (e) => {

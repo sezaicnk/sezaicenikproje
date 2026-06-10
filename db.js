@@ -81,7 +81,9 @@ const defaultData = {
   ],
   contact_messages: [],
   orders: [],
-  nextProductId: 9
+  users: [],
+  nextProductId: 9,
+  nextUserId: 1
 };
 
 function ensureDb() {
@@ -93,9 +95,27 @@ function ensureDb() {
   }
 }
 
+function mergeDefaults(data) {
+  return {
+    ...defaultData,
+    ...data,
+    products: Array.isArray(data.products) ? data.products : defaultData.products,
+    contact_messages: Array.isArray(data.contact_messages) ? data.contact_messages : defaultData.contact_messages,
+    orders: Array.isArray(data.orders) ? data.orders : defaultData.orders,
+    users: Array.isArray(data.users) ? data.users : defaultData.users,
+    nextProductId: typeof data.nextProductId === 'number' ? data.nextProductId : defaultData.nextProductId,
+    nextUserId: typeof data.nextUserId === 'number' ? data.nextUserId : defaultData.nextUserId
+  };
+}
+
 function readDb() {
   ensureDb();
-  return JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+  const merged = mergeDefaults(data);
+  if (JSON.stringify(merged) !== JSON.stringify(data)) {
+    fs.writeFileSync(dbPath, JSON.stringify(merged, null, 2), 'utf8');
+  }
+  return merged;
 }
 
 function writeDb(data) {
@@ -149,7 +169,35 @@ function addContactMessage(message) {
   return entry;
 }
 
-function createOrder(items) {
+function getOrders() {
+  return readDb().orders;
+}
+
+function getUserByEmail(email) {
+  return readDb().users.find(user => user.email.toLowerCase() === String(email).toLowerCase());
+}
+
+function createUser(user) {
+  const db = readDb();
+  if (getUserByEmail(user.email)) {
+    throw new Error('Bu e-posta ile kayıtlı kullanıcı mevcut');
+  }
+
+  const newUser = {
+    id: db.nextUserId++,
+    fullName: user.fullName || '',
+    email: user.email.toLowerCase(),
+    password: user.password,
+    phone: user.phone || '',
+    created_at: new Date().toISOString()
+  };
+
+  db.users.push(newUser);
+  writeDb(db);
+  return { id: newUser.id, fullName: newUser.fullName, email: newUser.email, phone: newUser.phone };
+}
+
+function createOrder(items, payment = {}, shippingAddress = {}) {
   const db = readDb();
   let total = 0;
   const orderItems = [];
@@ -181,10 +229,24 @@ function createOrder(items) {
     throw new Error('Geçerli ürün bulunamadı');
   }
 
+  const cardNumber = String(payment.cardNumber || '').replace(/\D/g, '');
   const order = {
     id: db.orders.length + 1,
     total,
     items: orderItems,
+    payment: {
+      cardHolder: payment.cardHolder || 'Belirtilmedi',
+      cardNumberLast4: cardNumber.slice(-4) || '****',
+      expiry: payment.expiry || '',
+      cvv: payment.cvv ? '***' : ''
+    },
+    shippingAddress: {
+      fullName: shippingAddress.fullName || '',
+      phone: shippingAddress.phone || '',
+      address: shippingAddress.address || '',
+      city: shippingAddress.city || '',
+      note: shippingAddress.note || ''
+    },
     created_at: new Date().toISOString()
   };
 
@@ -200,5 +262,8 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addContactMessage,
+  getOrders,
+  getUserByEmail,
+  createUser,
   createOrder
 };

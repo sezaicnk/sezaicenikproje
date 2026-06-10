@@ -5,7 +5,7 @@
       "name": "Portland Çimento 50kg",
       "category": "Çimento",
       "price": 185,
-      "stock": 250,
+      "stock": 249,
       "description": "Yüksek kaliteli Portland çimentosu, tüm inşaat işlerinde kullanıma uygundur.",
       "image": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=80"
     },
@@ -14,7 +14,7 @@
       "name": "İnşaat Demiri 12mm",
       "category": "Demir",
       "price": 45,
-      "stock": 499,
+      "stock": 498,
       "description": "TS 708 standartlarına uygun nervürlü inşaat demiri, ton fiyatı.",
       "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&q=80"
     },
@@ -87,7 +87,63 @@
         }
       ],
       "created_at": "2026-06-10T08:02:40.080Z"
+    },
+    {
+      "id": 2,
+      "total": 185,
+      "items": [
+        {
+          "id": 1,
+          "name": "Portland Çimento 50kg",
+          "price": 185,
+          "quantity": 1
+        }
+      ],
+      "payment": {
+        "cardHolder": "Ali Veli",
+        "cardNumberLast4": "1111",
+        "expiry": "12/30",
+        "cvv": "***"
+      },
+      "created_at": "2026-06-10T11:18:18.501Z"
+    },
+    {
+      "id": 3,
+      "total": 45,
+      "items": [
+        {
+          "id": 2,
+          "name": "İnşaat Demiri 12mm",
+          "price": 45,
+          "quantity": 1
+        }
+      ],
+      "payment": {
+        "cardHolder": "Test User",
+        "cardNumberLast4": "1111",
+        "expiry": "12/30",
+        "cvv": "***"
+      },
+      "shippingAddress": {
+        "fullName": "Test User",
+        "phone": "0555",
+        "address": "Test address",
+        "city": "İstanbul",
+        "note": "x"
+      },
+      "created_at": "2026-06-10T11:22:01.591Z"
     }
   ],
-  "nextProductId": 9
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Test Kullanıcı",
+      "email": "testuser@example.com",
+      "password": "123456",
+      "phone": "05551234567",
+      "created_at": "2026-06-10T11:28:22.078Z"
+    }
+  ],
+  "nextProductId": 9,
+  "nextUserId": 2
 }

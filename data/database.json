@@ -1,0 +1,93 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Portland Çimento 50kg",
+      "category": "Çimento",
+      "price": 185,
+      "stock": 250,
+      "description": "Yüksek kaliteli Portland çimentosu, tüm inşaat işlerinde kullanıma uygundur.",
+      "image": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=80"
+    },
+    {
+      "id": 2,
+      "name": "İnşaat Demiri 12mm",
+      "category": "Demir",
+      "price": 45,
+      "stock": 499,
+      "description": "TS 708 standartlarına uygun nervürlü inşaat demiri, ton fiyatı.",
+      "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&q=80"
+    },
+    {
+      "id": 3,
+      "name": "Tuğla (Delikli)",
+      "category": "Tuğla",
+      "price": 3.5,
+      "stock": 10000,
+      "description": "Standart delikli tuğla, ısı ve ses yalıtımı sağlar.",
+      "image": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&q=80"
+    },
+    {
+      "id": 4,
+      "name": "Dış Cephe Boyası 15L",
+      "category": "Boya",
+      "price": 890,
+      "stock": 80,
+      "description": "Silikonlu dış cephe boyası, UV ve yağmur dirençli.",
+      "image": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=80"
+    },
+    {
+      "id": 5,
+      "name": "OSB Levha 18mm",
+      "category": "Ahşap",
+      "price": 320,
+      "stock": 150,
+      "description": "Yönlendirilmiş talaş levhası, çatı ve duvar uygulamaları için.",
+      "image": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80"
+    },
+    {
+      "id": 6,
+      "name": "Seramik Yapıştırıcı 25kg",
+      "category": "Yapıştırıcı",
+      "price": 145,
+      "stock": 200,
+      "description": "Flex seramik yapıştırıcısı, iç ve dış mekan kullanımına uygun.",
+      "image": "https://images.unsplash.com/photo-1615876237396-80a234a9214e?w=400&q=80"
+    },
+    {
+      "id": 7,
+      "name": "İzolasyon Levhası 5cm",
+      "category": "İzolasyon",
+      "price": 78,
+      "stock": 300,
+      "description": "XPS ısı yalıtım levhası, yüksek basınç dayanımı.",
+      "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80"
+    },
+    {
+      "id": 8,
+      "name": "Kum (m³)",
+      "category": "Agrega",
+      "price": 350,
+      "stock": 50,
+      "description": "Eleklenmiş inşaat kumu, beton ve harç karışımları için.",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
+    }
+  ],
+  "contact_messages": [],
+  "orders": [
+    {
+      "id": 1,
+      "total": 45,
+      "items": [
+        {
+          "id": 2,
+          "name": "İnşaat Demiri 12mm",
+          "price": 45,
+          "quantity": 1
+        }
+      ],
+      "created_at": "2026-06-10T08:02:40.080Z"
+    }
+  ],
+  "nextProductId": 9
+}

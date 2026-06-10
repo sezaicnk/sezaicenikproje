@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İletişim - Altuğ Yapı</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">🏗️</div>
+          Altuğ Yapı
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">Ana Sayfa</a></li>
+          <li><a href="magaza.html">Mağaza</a></li>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="iletisim.html">İletişim</a></li>
+          <li><a href="login.html">Giriş Yap</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="cart-btn" onclick="openCart()">
+            🛒 Sepet
+            <span class="cart-count" style="display:none">0</span>
+          </button>
+          <button class="menu-toggle">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>İletişim</h1>
+      <p>Sorularınız için bize ulaşın</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-card">
+            <div class="contact-icon">📧</div>
+            <div>
+              <h3>E-posta</h3>
+              <p>Sipariş ve bilgi talepleriniz için:</p>
+              <a href="mailto:altugyapi00@gmail.com">altugyapi00@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">📞</div>
+            <div>
+              <h3>Telefon</h3>
+              <p>Hafta içi 08:00 - 18:00 arası:</p>
+              <a href="tel:+905321234567">0532 123 45 67</a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">📍</div>
+            <div>
+              <h3>Adres</h3>
+              <p>Organize Sanayi Bölgesi<br>İstanbul, Türkiye</p>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <h3>Çalışma Saatleri</h3>
+              <p>Pazartesi - Cumartesi: 08:00 - 18:00<br>Pazar: Kapalı</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h3 style="margin-bottom: 24px; color: var(--secondary);">Bize Mesaj Gönderin</h3>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Ad Soyad</label>
+              <input type="text" id="name" required placeholder="Adınız Soyadınız">
+            </div>
+            <div class="form-group">
+              <label for="email">E-posta</label>
+              <input type="email" id="email" required placeholder="ornek@email.com">
+            </div>
+            <div class="form-group">
+              <label for="phone">Telefon</label>
+              <input type="tel" id="phone" placeholder="05XX XXX XX XX">
+            </div>
+            <div class="form-group">
+              <label for="message">Mesajınız</label>
+              <textarea id="message" required placeholder="Mesajınızı buraya yazın..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Gönder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🏗️ Altuğ Yapı</h3>
+          <p>Türkiye'nin güvenilir inşaat malzemeleri tedarikçisi.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Sayfalar</h4>
+          <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="magaza.html">Mağaza</a></li>
+            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+            <li><a href="iletisim.html">İletişim</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>İletişim</h4>
+          <ul>
+            <li><a href="mailto:altugyapi00@gmail.com">altugyapi00@gmail.com</a></li>
+            <li><a href="tel:+905321234567">0532 123 45 67</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Altuğ Yapı. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>🛒 Sepetim</h3>
+      <button class="close-cart" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Toplam:</span>
+        <span id="cartTotal">₺0,00</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="completeOrder()">Siparişi Tamamla</button>
+    </div>
+  </div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

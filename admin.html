@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Altuğ Yapı</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-container">
+    <div class="login-box">
+      <h2>🔐 Admin Girişi</h2>
+      <div id="loginAlert" class="alert alert-error hidden"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="adminUser">Kullanıcı Adı</label>
+          <input type="text" id="adminUser" required placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label for="adminPass">Şifre</label>
+          <input type="password" id="adminPass" required placeholder="••••••">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Giriş Yap</button>
+      </form>
+      <p style="text-align:center; margin-top:16px; color:#7f8c8d; font-size:0.85rem;">
+        Demo: admin / admin123
+      </p>
+      <a href="login.html" style="display:block; text-align:center; margin-top:12px; color:var(--primary);">← Giriş ekranına dön</a>
+      <a href="index.html" style="display:block; text-align:center; margin-top:8px; color:var(--text-light);">Ana sayfaya git</a>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="adminPanel" class="admin-layout hidden">
+    <aside class="admin-sidebar">
+      <h2>🏗️ Admin Panel</h2>
+      <ul class="admin-nav">
+        <li><button class="active" data-tab="products">📦 Ürün Yönetimi</button></li>
+        <li><button data-tab="add">➕ Ürün Ekle</button></li>
+        <li><button data-tab="stock">📊 Stok Kontrolü</button></li>
+        <li><button id="logoutBtn">🚪 Çıkış Yap</button></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <!-- Products Tab -->
+      <div id="tab-products" class="admin-tab">
+        <div class="admin-header">
+          <h1>Ürün Yönetimi</h1>
+          <span id="productCount" style="color:var(--text-light)"></span>
+        </div>
+        <div class="admin-card">
+          <div id="adminAlert"></div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Kategori</th>
+                <th>Fiyat</th>
+                <th>Stok</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add Product Tab -->
+      <div id="tab-add" class="admin-tab hidden">
+        <div class="admin-header">
+          <h1>Yeni Ürün Ekle</h1>
+        </div>
+        <div class="admin-card">
+          <form id="addProductForm">
+            <div class="form-group">
+              <label for="productName">Ürün Adı</label>
+              <input type="text" id="productName" required placeholder="Örn: Portland Çimento 50kg">
+            </div>
+            <div class="form-group">
+              <label for="productCategory">Kategori</label>
+              <select id="productCategory" required>
+                <option value="">Seçiniz</option>
+                <option value="Çimento">Çimento</option>
+                <option value="Demir">Demir</option>
+                <option value="Tuğla">Tuğla</option>
+                <option value="Boya">Boya</option>
+                <option value="Ahşap">Ahşap</option>
+                <option value="Yapıştırıcı">Yapıştırıcı</option>
+                <option value="İzolasyon">İzolasyon</option>
+                <option value="Agrega">Agrega</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="productPrice">Fiyat (₺)</label>
+              <input type="number" id="productPrice" required min="0" step="0.01" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label for="productStock">Stok Adedi</label>
+              <input type="number" id="productStock" required min="0" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label for="productDesc">Açıklama</label>
+              <textarea id="productDesc" required placeholder="Ürün açıklaması..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="productImage">Görsel URL</label>
+              <input type="url" id="productImage" placeholder="https://...">
+            </div>
+            <button type="submit" class="btn btn-primary">Ürün Ekle</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Stock Tab -->
+      <div id="tab-stock" class="admin-tab hidden">
+        <div class="admin-header">
+          <h1>Stok Kontrolü</h1>
+        </div>
+        <div class="admin-card">
+          <div id="stockSummary" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:24px;"></div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Mevcut Stok</th>
+                <th>Durum</th>
+                <th>Stok Güncelle</th>
+              </tr>
+            </thead>
+            <tbody id="stockTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/products.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

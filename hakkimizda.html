@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hakkımızda - Altuğ Yapı</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">🏗️</div>
+          Altuğ Yapı
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">Ana Sayfa</a></li>
+          <li><a href="magaza.html">Mağaza</a></li>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="iletisim.html">İletişim</a></li>
+          <li><a href="login.html">Giriş Yap</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="cart-btn" onclick="openCart()">
+            🛒 Sepet
+            <span class="cart-count" style="display:none">0</span>
+          </button>
+          <button class="menu-toggle">☰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Hakkımızda</h1>
+      <p>Altuğ Yapı hikayesi ve değerlerimiz</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>İnşaat Malzemelerinde Güvenilir E-Ticaret Partneriniz</h2>
+          <p>
+            <strong>Altuğ Yapı</strong>, inşaat sektörüne yönelik kaliteli malzeme tedarikinde uzmanlaşmış bir e-ticaret firmasıdır. 
+            Çimento, demir, tuğla, boya, izolasyon malzemeleri ve daha birçok inşaat ürününü tek platformda bir araya getirerek 
+            müşterilerimize kolay, hızlı ve güvenilir alışveriş deneyimi sunuyoruz.
+          </p>
+          <p>
+            Firmamız, hem bireysel müşterilere hem de inşaat firmalarına toptan ve perakende satış hizmeti vermektedir. 
+            TSE standartlarına uygun, sertifikalı ürünlerle çalışıyor; stoklarımızı düzenli olarak güncelleyerek 
+            ihtiyaç duyduğunuz malzemeleri zamanında teslim etmeyi taahhüt ediyoruz.
+          </p>
+          <p>
+            Online mağazamız üzerinden ürünleri inceleyebilir, sepetinize ekleyebilir ve siparişinizi kolayca tamamlayabilirsiniz. 
+            Deneyimli ekibimiz, projenize en uygun malzeme seçiminde size rehberlik etmek için her zaman hazırdır.
+          </p>
+          <p>
+            Altuğ Yapı olarak misyonumuz; inşaat projelerinizin aksamadan ilerlemesi için kaliteli malzemeyi 
+            uygun fiyata, hızlı teslimatla sunmaktır. Güveniniz bizim en büyük sermayemizdir.
+          </p>
+        </div>
+        <div class="about-image"></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Mutlu Müşteri</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Ürün Çeşidi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Yıllık Deneyim</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">81</div>
+          <div class="stat-label">İl Teslimat</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🏗️ Altuğ Yapı</h3>
+          <p>Türkiye'nin güvenilir inşaat malzemeleri tedarikçisi.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Sayfalar</h4>
+          <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="magaza.html">Mağaza</a></li>
+            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+            <li><a href="iletisim.html">İletişim</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>İletişim</h4>
+          <ul>
+            <li><a href="mailto:altugyapi00@gmail.com">altugyapi00@gmail.com</a></li>
+            <li><a href="tel:+905321234567">0532 123 45 67</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Altuğ Yapı. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>🛒 Sepetim</h3>
+      <button class="close-cart" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Toplam:</span>
+        <span id="cartTotal">₺0,00</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="completeOrder()">Siparişi Tamamla</button>
+    </div>
+  </div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

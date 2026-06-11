@@ -1,18 +1,3 @@
-const API_BASE = '';
-
-async function apiRequest(url, options = {}) {
-  const response = await fetch(`${API_BASE}${url}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
-  });
-
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(data.error || 'Kayıt sırasında hata oluştu');
-  }
-  return data;
-}
-
 async function registerUser(formData) {
   return apiRequest('/api/auth/register', {
     method: 'POST',
@@ -41,14 +26,19 @@ function initRegister() {
 
     try {
       await registerUser(formData);
-      showRegisterAlert('Kayıt başarıyla oluşturuldu. Giriş sayfasına yönlendiriliyorsunuz...', 'success');
+      await loginAdmin(formData.email, formData.password);
+      showRegisterAlert('Kayıt başarıyla oluşturuldu. Ana sayfaya yönlendiriliyorsunuz...', 'success');
       setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1000);
+        window.location.href = 'index.html';
+      }, 800);
     } catch (error) {
       showRegisterAlert(error.message, 'error');
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', initRegister);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initRegister);
+} else {
+  initRegister();
+}

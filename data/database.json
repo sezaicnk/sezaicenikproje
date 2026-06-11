@@ -142,8 +142,42 @@
       "password": "123456",
       "phone": "05551234567",
       "created_at": "2026-06-10T11:28:22.078Z"
+    },
+    {
+      "id": 2,
+      "fullName": "ahmet",
+      "email": "ahmet@gmail.com",
+      "password": "1234",
+      "phone": "05456958768",
+      "created_at": "2026-06-11T09:22:09.450Z"
+    },
+    {
+      "id": 3,
+      "fullName": "Test User",
+      "email": "test_1781172049289@example.com",
+      "password": "password123",
+      "phone": "",
+      "created_at": "2026-06-11T10:00:49.368Z"
+    },
+    {
+      "id": 4,
+      "fullName": "ahmet",
+      "email": "ahmet123@gmail.com",
+      "password": "123123",
+      "phone": "123124151",
+      "created_at": "2026-06-11T10:01:59.949Z"
     }
   ],
+  "categories": [
+    "Çimento",
+    "Demir",
+    "Tuğla",
+    "Boya",
+    "Ahşap",
+    "Yapıştırıcı",
+    "İzolasyon",
+    "Agrega"
+  ],
   "nextProductId": 9,
-  "nextUserId": 2
+  "nextUserId": 5
 }

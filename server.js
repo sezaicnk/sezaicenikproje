@@ -150,6 +150,19 @@ app.get('/api/orders', requireAdmin, (_req, res) => {
   res.json(db.getOrders());
 });
 
+app.get('/api/categories', (_req, res) => {
+  res.json(db.getCategories());
+});
+
+app.post('/api/categories', requireAdmin, (req, res) => {
+  try {
+    const category = db.addCategory(req.body.name);
+    res.status(category.alreadyExists ? 200 : 201).json(category);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 app.post('/api/orders', (req, res) => {
   const { items, payment, shippingAddress } = req.body;
 

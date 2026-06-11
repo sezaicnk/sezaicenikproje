@@ -82,6 +82,7 @@ const defaultData = {
   contact_messages: [],
   orders: [],
   users: [],
+  categories: ['Çimento', 'Demir', 'Tuğla', 'Boya', 'Ahşap', 'Yapıştırıcı', 'İzolasyon', 'Agrega'],
   nextProductId: 9,
   nextUserId: 1
 };
@@ -103,6 +104,9 @@ function mergeDefaults(data) {
     contact_messages: Array.isArray(data.contact_messages) ? data.contact_messages : defaultData.contact_messages,
     orders: Array.isArray(data.orders) ? data.orders : defaultData.orders,
     users: Array.isArray(data.users) ? data.users : defaultData.users,
+    categories: Array.isArray(data.categories) && data.categories.length
+      ? data.categories
+      : defaultData.categories,
     nextProductId: typeof data.nextProductId === 'number' ? data.nextProductId : defaultData.nextProductId,
     nextUserId: typeof data.nextUserId === 'number' ? data.nextUserId : defaultData.nextUserId
   };
@@ -171,6 +175,26 @@ function addContactMessage(message) {
 
 function getOrders() {
   return readDb().orders;
+}
+
+function getCategories() {
+  return readDb().categories;
+}
+
+function addCategory(name) {
+  const db = readDb();
+  const normalized = String(name || '').trim();
+  if (!normalized) {
+    throw new Error('Kategori adı zorunludur');
+  }
+
+  if (db.categories.includes(normalized)) {
+    return { name: normalized, alreadyExists: true };
+  }
+
+  db.categories.push(normalized);
+  writeDb(db);
+  return { name: normalized, alreadyExists: false };
 }
 
 function getUserByEmail(email) {
@@ -263,6 +287,8 @@ module.exports = {
   deleteProduct,
   addContactMessage,
   getOrders,
+  getCategories,
+  addCategory,
   getUserByEmail,
   createUser,
   createOrder

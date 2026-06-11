@@ -6,8 +6,8 @@ async function handleAdminLogin(event) {
   const password = document.getElementById('adminPass').value;
 
   try {
-    await loginAdmin(username, password);
-    window.location.href = 'admin.html';
+    const data = await loginAdmin(username, password);
+    window.location.href = 'index.html';
   } catch (error) {
     if (alertEl) {
       alertEl.textContent = error.message;

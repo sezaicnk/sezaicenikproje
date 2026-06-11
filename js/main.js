@@ -1,3 +1,26 @@
+function renderUserProfile() {
+  const profileNav = document.getElementById('profileNavItem');
+  if (!profileNav) return;
+
+  const user = getCurrentUser?.();
+
+  if (!user) {
+    profileNav.innerHTML = '<a href="login.html" class="profile-chip profile-chip--login">Giriş Yap</a>';
+    return;
+  }
+
+  const label = user.role === 'admin' ? '👑 Admin' : '👤 ' + (user.name || 'Profil');
+  const adminLink = user.role === 'admin'
+    ? ' <a href="admin.html" class="profile-chip profile-chip--admin">Admin Panel</a>'
+    : '';
+
+  profileNav.innerHTML = `
+    <span class="profile-chip">${label}</span>
+    ${adminLink}
+    <button class="profile-chip profile-chip--ghost" type="button" onclick="logoutAdmin(); window.location.reload();">Çıkış</button>
+  `;
+}
+
 function initNavigation() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(link => {
@@ -113,6 +136,7 @@ function initMagazaPage() {
 
 async function initApp() {
   initNavigation();
+  renderUserProfile();
   initCart();
   initContactForm();
 

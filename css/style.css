@@ -109,6 +109,65 @@ header {
   gap: 12px;
 }
 
+.profile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.profile-chip:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.profile-chip--admin {
+  background: rgba(230, 126, 34, 0.18);
+  border-color: rgba(230, 126, 34, 0.3);
+}
+
+.profile-chip--admin:hover {
+  background: rgba(230, 126, 34, 0.28);
+  border-color: rgba(230, 126, 34, 0.5);
+}
+
+.profile-chip--ghost {
+  background: transparent;
+  cursor: pointer;
+  color: #fff;
+  border-color: transparent;
+}
+
+.profile-chip--ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.profile-chip--login {
+  background: var(--primary);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.profile-chip--login:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
 .cart-btn {
   position: relative;
   background: var(--primary);

@@ -1,5 +1,6 @@
 const API_BASE = '';
 const SESSION_KEY = 'altugyapi_admin';
+const USER_KEY = 'altugyapi_user';
 
 let productsCache = [];
 
@@ -100,16 +101,37 @@ async function loginAdmin(username, password) {
     method: 'POST',
     body: JSON.stringify({ username, password })
   });
+
   sessionStorage.setItem(SESSION_KEY, data.token);
+  sessionStorage.setItem(USER_KEY, JSON.stringify({
+    role: data.role || 'user',
+    name: data.user?.fullName || data.user?.email || username,
+    email: data.user?.email || '',
+    token: data.token
+  }));
+
   return data;
 }
 
 function logoutAdmin() {
   sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(USER_KEY);
+}
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(sessionStorage.getItem(USER_KEY) || 'null');
+  } catch {
+    return null;
+  }
 }
 
 function isLoggedIn() {
   return !!sessionStorage.getItem(SESSION_KEY);
+}
+
+function isAdminUser() {
+  return getCurrentUser()?.role === 'admin';
 }
 
 async function submitContact(formData) {

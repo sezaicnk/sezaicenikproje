@@ -84,15 +84,14 @@
               <label for="productCategory">Kategori</label>
               <select id="productCategory" required>
                 <option value="">Seçiniz</option>
-                <option value="Çimento">Çimento</option>
-                <option value="Demir">Demir</option>
-                <option value="Tuğla">Tuğla</option>
-                <option value="Boya">Boya</option>
-                <option value="Ahşap">Ahşap</option>
-                <option value="Yapıştırıcı">Yapıştırıcı</option>
-                <option value="İzolasyon">İzolasyon</option>
-                <option value="Agrega">Agrega</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label for="newCategoryName">Yeni Kategori Ekle</label>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="newCategoryName" placeholder="Örn: Elektrik Malzemesi" style="flex:1; min-width:240px;">
+                <button type="button" id="addCategoryBtn" class="btn btn-outline">Kategori Ekle</button>
+              </div>
             </div>
             <div class="form-group">
               <label for="productPrice">Fiyat (₺)</label>

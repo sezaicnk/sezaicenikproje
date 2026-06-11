@@ -7,6 +7,23 @@ function showAdminAlert(message, type = 'success') {
   setTimeout(() => alertEl.classList.add('hidden'), 3000);
 }
 
+async function loadCategories() {
+  try {
+    return await apiRequest('/api/categories');
+  } catch (error) {
+    showAdminAlert(error.message, 'error');
+    return [];
+  }
+}
+
+function populateCategoryOptions(categories = []) {
+  const select = document.getElementById('productCategory');
+  if (!select) return;
+
+  const uniqueCategories = [...new Set([...(categories || []), ...getCategories()])];
+  select.innerHTML = '<option value="">Seçiniz</option>' + uniqueCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+}
+
 function renderProductsTable() {
   const tbody = document.getElementById('productsTable');
   const countEl = document.getElementById('productCount');
@@ -192,6 +209,7 @@ async function initAdmin() {
 
   if (isLoggedIn()) {
     await initProducts();
+    populateCategoryOptions(await loadCategories());
     loginScreen.classList.add('hidden');
     adminPanel.classList.remove('hidden');
     populateOrderProductOptions();
@@ -207,6 +225,7 @@ async function initAdmin() {
     try {
       await loginAdmin(user, pass);
       await initProducts();
+      populateCategoryOptions(await loadCategories());
       loginScreen.classList.add('hidden');
       adminPanel.classList.remove('hidden');
       alertEl.classList.add('hidden');
@@ -225,6 +244,26 @@ async function initAdmin() {
 
   document.querySelectorAll('.admin-nav button[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  document.getElementById('addCategoryBtn')?.addEventListener('click', async () => {
+    const categoryName = document.getElementById('newCategoryName').value.trim();
+    if (!categoryName) {
+      showAdminAlert('Kategori adı girin.', 'error');
+      return;
+    }
+
+    try {
+      await apiRequest('/api/categories', {
+        method: 'POST',
+        body: JSON.stringify({ name: categoryName })
+      });
+      document.getElementById('newCategoryName').value = '';
+      populateCategoryOptions(await loadCategories());
+      showAdminAlert('Kategori eklendi.');
+    } catch (error) {
+      showAdminAlert(error.message, 'error');
+    }
   });
 
   document.getElementById('createOrderForm')?.addEventListener('submit', async (e) => {

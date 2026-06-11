@@ -135,6 +135,24 @@ function initMagazaPage() {
 }
 
 async function initApp() {
+  // Handle GitHub OAuth Redirect login params
+  const urlParams = new URLSearchParams(window.location.search);
+  const oauthToken = urlParams.get('oauth_token');
+  const oauthName = urlParams.get('oauth_name');
+  const oauthEmail = urlParams.get('oauth_email');
+
+  if (oauthToken && oauthName) {
+    sessionStorage.setItem('altugyapi_admin', oauthToken);
+    sessionStorage.setItem('altugyapi_user', JSON.stringify({
+      role: 'user',
+      name: decodeURIComponent(oauthName),
+      email: decodeURIComponent(oauthEmail || ''),
+      token: oauthToken
+    }));
+    // Clean URL parameters
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
   initNavigation();
   renderUserProfile();
   initCart();

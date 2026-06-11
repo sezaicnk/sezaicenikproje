@@ -221,6 +221,33 @@ function createUser(user) {
   return { id: newUser.id, fullName: newUser.fullName, email: newUser.email, phone: newUser.phone };
 }
 
+function findOrCreateGitHubUser(githubProfile) {
+  const db = readDb();
+  let user = db.users.find(u => 
+    u.githubId === githubProfile.id || 
+    (githubProfile.email && u.email.toLowerCase() === githubProfile.email.toLowerCase())
+  );
+
+  if (!user) {
+    user = {
+      id: db.nextUserId++,
+      fullName: githubProfile.name || githubProfile.login || 'GitHub User',
+      email: githubProfile.email || `${githubProfile.login.toLowerCase()}@github.local`,
+      password: '',
+      githubId: githubProfile.id,
+      phone: '',
+      created_at: new Date().toISOString()
+    };
+    db.users.push(user);
+    writeDb(db);
+  } else if (!user.githubId) {
+    user.githubId = githubProfile.id;
+    writeDb(db);
+  }
+
+  return user;
+}
+
 function createOrder(items, payment = {}, shippingAddress = {}) {
   const db = readDb();
   let total = 0;
@@ -291,5 +318,6 @@ module.exports = {
   addCategory,
   getUserByEmail,
   createUser,
+  findOrCreateGitHubUser,
   createOrder
 };

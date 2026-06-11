@@ -21,6 +21,17 @@ function initLoginPage() {
   if (form) {
     form.addEventListener('submit', handleAdminLogin);
   }
+
+  // Display URL-based OAuth/login errors
+  const urlParams = new URLSearchParams(window.location.search);
+  const error = urlParams.get('error');
+  if (error) {
+    const alertEl = document.getElementById('loginAlert');
+    if (alertEl) {
+      alertEl.textContent = 'Giriş Başarısız: ' + decodeURIComponent(error);
+      alertEl.classList.remove('hidden');
+    }
+  }
 }
 
 if (document.readyState === 'loading') {

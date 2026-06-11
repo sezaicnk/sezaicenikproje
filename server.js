@@ -10,6 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
 
 const activeTokens = new Set();
 
@@ -63,6 +65,91 @@ app.post('/api/auth/register', (req, res) => {
     res.status(201).json({ message: 'Kayıt başarıyla oluşturuldu', user });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/api/auth/github', (req, res) => {
+  if (!GITHUB_CLIENT_ID) {
+    return res.status(500).send('GitHub Client ID is not configured in .env file');
+  }
+  const redirectUri = `http://localhost:${PORT}/api/auth/github/callback`;
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
+  res.redirect(githubAuthUrl);
+});
+
+app.get('/api/auth/github/callback', async (req, res) => {
+  const { code } = req.query;
+
+  if (!code) {
+    return res.redirect('/login.html?error=no_code_provided');
+  }
+
+  try {
+    const redirectUri = `http://localhost:${PORT}/api/auth/github/callback`;
+    
+    // 1. Exchange authorization code for access token
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        client_id: GITHUB_CLIENT_ID,
+        client_secret: GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: redirectUri
+      })
+    });
+
+    const tokenData = await tokenResponse.json();
+    if (!tokenData.access_token) {
+      console.error('GitHub Token Exchange Error:', tokenData);
+      return res.redirect('/login.html?error=github_token_failed');
+    }
+
+    // 2. Fetch GitHub user profile
+    const userResponse = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `Bearer ${tokenData.access_token}`,
+        'User-Agent': 'Altuğ Yapı OAuth'
+      }
+    });
+    const githubUser = await userResponse.json();
+
+    if (!githubUser.id) {
+      return res.redirect('/login.html?error=github_user_failed');
+    }
+
+    // 3. Try to get public email if not in profile
+    if (!githubUser.email) {
+      const emailsResponse = await fetch('https://api.github.com/user/emails', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`,
+          'User-Agent': 'Altuğ Yapı OAuth'
+        }
+      });
+      const emails = await emailsResponse.json().catch(() => []);
+      const primaryEmail = emails.find(e => e.primary && e.verified) || emails[0];
+      if (primaryEmail) {
+        githubUser.email = primaryEmail.email;
+      }
+    }
+
+    // 4. Create or Find User in database
+    const user = db.findOrCreateGitHubUser(githubUser);
+
+    // 5. Generate session token for our app
+    const token = crypto.randomBytes(32).toString('hex');
+    activeTokens.add(token);
+
+    // 6. Redirect to index.html with login params
+    const name = encodeURIComponent(user.fullName || user.email);
+    const email = encodeURIComponent(user.email);
+    res.redirect(`/index.html?oauth_token=${token}&oauth_name=${name}&oauth_email=${email}`);
+  } catch (error) {
+    console.error('GitHub OAuth Error:', error);
+    res.redirect(`/login.html?error=${encodeURIComponent(error.message)}`);
   }
 });
 
